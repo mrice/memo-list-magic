@@ -17,6 +17,7 @@
     <javaMailVerion>1.4.7</javaMailVerion>
     <mockitoVersion>1.10.19</mockitoVersion>
     <guavaVersion>19.0</guavaVersion>
+    <mongoVersion>3.0.4</mongoVersion>
   </properties>
 
   <dependencies>
@@ -42,7 +43,12 @@
       <artifactId>guava</artifactId>
       <version>${guavaVersion}</version>
     </dependency>
-    </dependencies>
+      <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongo-java-driver</artifactId>
+        <version>${mongoVersion}</version>
+      </dependency>
+  </dependencies>
     <build>
       <plugins>
         <plugin>

@@ -1,5 +1,10 @@
 package com.redhat.mlm;
 
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+
 import javax.mail.*;
 import javax.mail.search.FlagTerm;
 import java.util.List;
@@ -7,6 +12,8 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class MemoListMagic {
 
@@ -27,21 +34,25 @@ public class MemoListMagic {
                 .anyMatch((address) -> "memo-list@redhat.com".equals(address.toString()));
     }
 
-    String normalizeSubjectLine(Message message) throws Exception {
-        Objects.requireNonNull(message, "Message is null");
-        Objects.requireNonNull(message.getSubject(), "Message subject line is null, and that's just not going to work");
+    String normalizeSubjectLine(Message message) {
+        try {
+            Objects.requireNonNull(message, "Message is null");
+            Objects.requireNonNull(message.getSubject(), "Message subject line is null, and that's just not going to work");
 
-        String normalizedSubjectLine;
+            String normalizedSubjectLine;
 
-        //TODO there's a lot we need to do here because there are soooooo many permutations and this implementation is waaaaayyyy too naive (and lame too)
-        if (message.getSubject().startsWith("RE: "))
-            normalizedSubjectLine = message.getSubject().substring("RE: ".length());
-        else
-            normalizedSubjectLine = message.getSubject();
-
-        return normalizedSubjectLine;
+            //TODO there's a lot we need to do here because there are soooooo many permutations and this implementation is waaaaayyyy too naive (and lame too)
+            if (message.getSubject().startsWith("RE: "))
+                normalizedSubjectLine = message.getSubject().substring("RE: ".length());
+            else
+                normalizedSubjectLine = message.getSubject();
+            return normalizedSubjectLine;
+        } catch (MessagingException e) {
+            return null;
+        }
     }
 
+    //TODO - lots and lots and lots to improve here!!!
     Message[] connectToServerAndRetrieveUnseenMsgs(String host, String user, String password) throws Exception {
 
         Properties properties = System.getProperties();
@@ -61,6 +72,27 @@ public class MemoListMagic {
         return messages;
     }
 
+    //TODO - lots and lots and lots to improve here!!!
+    void updateOrInsertDatabaseMetrics(List<Message> messages) throws Exception {
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase db = mongoClient.getDatabase("memoList");
+        messages.stream().forEach((message) -> {
+            String subjectLine = normalizeSubjectLine(message);
+            if (db.getCollection("messages").find(eq("subject", subjectLine)).first() != null) {
+                Document record = db.getCollection("messages").find(eq("subject", subjectLine)).first();
+                Integer currentReplyCound = record.getInteger("replyCount");
+                db.getCollection("messages").updateOne(record,
+                        new Document("$set", new Document("replyCount", currentReplyCound++)));
+            } else {
+                db.getCollection("messages").insertOne(
+                        new Document()
+                            .append("subject", subjectLine)
+                            .append("replyCount", new Integer(0))
+                );
+            }
+        });
+    }
+
     public void run(String emailHost, String emailUser, String emailPassword) throws Exception {
         while(true) {
             System.out.println(String.format("Connecting to server %s", emailHost));
@@ -69,7 +101,7 @@ public class MemoListMagic {
 
             List<Message> memoListMessages = filterMemoListMessagesToList(messages);
 
-            //TODO - database insertion here
+            updateOrInsertDatabaseMetrics(memoListMessages);
 
             System.out.println("Sleeping... zzzz");
             Thread.sleep(5000);
