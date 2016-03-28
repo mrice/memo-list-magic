@@ -54,6 +54,23 @@ public class MemoListMagicTest {
 
     }
 
+
+    @Test
+    public void testNormalizeSubjectLine() throws Exception {
+
+        Message oneMessage = mock(Message.class);
+        Message replyMessage = mock(Message.class);
+
+        String whinyMemoListSubjectLne = "The coffee Maker on 16 is the WORST!";
+        when(oneMessage.getSubject()).thenReturn(whinyMemoListSubjectLne);
+        when(replyMessage.getSubject()).thenReturn("RE: "+whinyMemoListSubjectLne);
+
+        MemoListMagic memoListMagic = new MemoListMagic();
+        assertEquals(whinyMemoListSubjectLne, memoListMagic.normalizeSubjectLine(oneMessage));
+        assertEquals(whinyMemoListSubjectLne, memoListMagic.normalizeSubjectLine(replyMessage));
+
+    }
+
     //handy way to convert to an array and still be readable, right? Or lame?
     Address[] multAddrBuilder(Address... addresses) {
         return addresses;
