@@ -1,79 +1,56 @@
 package com.redhat.mlm;
 
 import org.junit.Test;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 
-import javax.mail.Address;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class MemoListMagicTest {
-
-    @Test
-    public void testMessageFilter() throws Exception {
-
-        Message memoListMessage = mock(Message.class);
-        Message notAMemoListMessage = mock(Message.class);
-        Message anotherMemoListMessage = mock(Message.class);
-
-        Address memoListAddress = mock(Address.class);
-        when(memoListAddress.toString()).thenReturn("memo-list@redhat.com");
-        Address michaelsAddress = mock(Address.class);
-        when(michaelsAddress.toString()).thenReturn("mrice@redhat.com");
-
-        when(memoListMessage.getReplyTo()).thenReturn(multAddrBuilder(memoListAddress));
-        when(notAMemoListMessage.getReplyTo()).thenReturn(multAddrBuilder(michaelsAddress));
-        when(anotherMemoListMessage.getReplyTo()).thenReturn(multAddrBuilder(michaelsAddress, memoListAddress));
-
-        MemoListMagic memoListMagic = new MemoListMagic();
-
-        Message unfilteredMessages[] = {memoListMessage, notAMemoListMessage, anotherMemoListMessage};
-
-        List<Message> filteredMessages = memoListMagic.filterMemoListMessagesToList(unfilteredMessages);
-        assertNotNull(filteredMessages);
-        assertEquals(2, filteredMessages.size());
-
-    }
-
-    @Test
-    public void testAddressesContainMemoList() {
-
-        Address memoListAddress = mock(Address.class);
-        when(memoListAddress.toString()).thenReturn("memo-list@redhat.com");
-        Address michaelsAddress = mock(Address.class);
-        when(michaelsAddress.toString()).thenReturn("mrice@redhat.com");
-
-        MemoListMagic memoListMagic = new MemoListMagic();
-        assertFalse(memoListMagic.addressesContainMemoList(multAddrBuilder(michaelsAddress)));
-        assertTrue(memoListMagic.addressesContainMemoList(multAddrBuilder(memoListAddress)));
-        assertTrue(memoListMagic.addressesContainMemoList(multAddrBuilder(michaelsAddress, memoListAddress)));
-
-    }
-
-
-    @Test
-    public void testNormalizeSubjectLine() throws Exception {
-
-        Message oneMessage = mock(Message.class);
-        Message replyMessage = mock(Message.class);
-
-        String whinyMemoListSubjectLne = "The coffee Maker on 16 is the WORST!";
-        when(oneMessage.getSubject()).thenReturn(whinyMemoListSubjectLne);
-        when(replyMessage.getSubject()).thenReturn("RE: "+whinyMemoListSubjectLne);
-
-        MemoListMagic memoListMagic = new MemoListMagic();
-        assertEquals(whinyMemoListSubjectLne, memoListMagic.normalizeSubjectLine(oneMessage));
-        assertEquals(whinyMemoListSubjectLne, memoListMagic.normalizeSubjectLine(replyMessage));
-
-    }
-
-    //handy way to convert to an array and still be readable, right? Or lame?
-    Address[] multAddrBuilder(Address... addresses) {
-        return addresses;
-    }
-
+	
+	@SuppressWarnings("serial")
+	@Test
+	public void testReplyCountAddition() throws MessagingException, Exception{
+		IMemoListRepo memoListRepo = mock(IMemoListRepo.class);
+		
+		Message messageOne = mock(Message.class);
+		when(messageOne.getSubject()).thenReturn("A Subject");
+        Message messageTwo = mock(Message.class);
+        when(messageTwo.getSubject()).thenReturn("A Subject");
+        Message messageThree = mock(Message.class);
+        when(messageThree.getSubject()).thenReturn("A Subject");
+        when(memoListRepo.getNewMessages()).thenReturn(
+        		new ArrayList<Message>(){{
+        			add(messageOne);
+        			add(messageTwo);
+        			add(messageThree);
+        		}});
+        
+        ThreadMetadata savedMetadata = new ThreadMetadata("A Subject", 1);
+        
+        
+        IThreadMetadataRepo threadMetadataRepo = mock(IThreadMetadataRepo.class);
+        //return no nothing the first call then a saved metadata the second call
+        when(threadMetadataRepo.getBySubject("A Subject"))
+        	.thenReturn(null)
+        	.thenReturn(savedMetadata)
+        	.thenReturn(savedMetadata);
+        
+        MemoListMagic mlm = new MemoListMagic(memoListRepo, threadMetadataRepo);
+        mlm.run();
+        Thread.sleep(4000);
+        mlm.stop();
+        
+        assertEquals(3, savedMetadata.replyCount);
+        //assert repo add method is called once and that update is called once.
+        Mockito.verify(threadMetadataRepo, Mockito.times(1)).add(Matchers.any());
+        Mockito.verify(threadMetadataRepo, Mockito.times(2)).update(Matchers.any());
+	}
 }
