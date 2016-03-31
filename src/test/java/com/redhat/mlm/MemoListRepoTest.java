@@ -100,6 +100,17 @@ public class MemoListRepoTest {
 		assertEquals(0, newMessages.size());
 	}
 	
+	@Test(expected=Exception.class)
+	public void testGettingMessagesWhenConnectionIsClosedThrowsException() throws Exception{
+		Store store = mock(Store.class);
+        
+		IEmailStoreFactory emailStoreFactory = mock(IEmailStoreFactory.class);
+        when(emailStoreFactory.getEmailStore()).thenReturn(store);
+        
+        MemoListRepo memoListRepo = new MemoListRepo(emailStoreFactory);
+        memoListRepo.getNewMessages();
+	}
+	
 	@Test(expected=NullPointerException.class)
 	public void testMemoListRepoCantBeConstructedWithNullEmailStoreFactory(){
 		new MemoListRepo(null);

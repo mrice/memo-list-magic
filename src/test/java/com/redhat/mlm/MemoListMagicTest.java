@@ -85,4 +85,17 @@ public class MemoListMagicTest {
 		IMemoListRepo memoListRepo = mock(IMemoListRepo.class);
 		new MemoListMagic(memoListRepo, null);
 	}
+	
+	//memolistRepo.getMessages throws exception
+	//memolistRepo.close throws exception
+	@Test
+	public void testErrorHandlingWhenMemoListRepoThrowsExceptionOnGetMessagesAndClose() throws Exception{
+		IMemoListRepo memoListRepo = mock(IMemoListRepo.class);
+		IThreadMetadataRepo threadMetadataRepo = mock(IThreadMetadataRepo.class);
+		MemoListMagic mlm = new MemoListMagic(memoListRepo, threadMetadataRepo);
+		Mockito.doThrow(new Exception()).when(memoListRepo).getNewMessages();
+		Mockito.doThrow(new MessagingException()).when(memoListRepo).close();
+		mlm.run();
+		
+	}
 }

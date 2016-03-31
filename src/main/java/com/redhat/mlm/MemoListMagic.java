@@ -54,6 +54,7 @@ public class MemoListMagic {
 				}
 		        catch (Exception e) {
 		        	e.printStackTrace();
+		        	keepRunning = false;
 		        	closeMemoListRepo();
 				}
 			}
@@ -103,7 +104,7 @@ public class MemoListMagic {
 			try {
 				memoListRepo.close();
 			} catch (MessagingException e1) {
-				//error closing connection. Not good.
+				System.out.println("//error closing connection. Not good.");
 				e1.printStackTrace();
 			}
 		}

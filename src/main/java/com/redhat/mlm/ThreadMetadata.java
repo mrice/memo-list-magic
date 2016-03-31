@@ -10,12 +10,6 @@ public class ThreadMetadata {
 		this.replyCount = replyCount;
 	}
 	
-	public int setReplyCount(int value) throws Exception{
-		checkNonNegative(value);
-		replyCount = value;
-		return replyCount;
-	}
-	
 	public void addOneReplyCount() throws Exception{
 		replyCount++;
 		checkNonNegative(replyCount);
