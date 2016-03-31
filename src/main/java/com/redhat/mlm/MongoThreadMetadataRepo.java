@@ -29,19 +29,24 @@ public class MongoThreadMetadataRepo implements IThreadMetadataRepo {
 	}
 	
 	private ThreadMetadata createNewThreadMetadataFromDocument(Document document){
-		return new ThreadMetadata(document.getString("subject"), document.getInteger("replyCount"));
+		try {
+			return new ThreadMetadata(document.getString("subject"), document.getInteger("replyCount"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	//should this be async?
 	@Override
-	public ThreadMetadata update(ThreadMetadata threadMetadata) {
-		Document record = db.getCollection("messages").find(eq("subject", threadMetadata)).first();
+	public ThreadMetadata update(ThreadMetadata threadMetadata){
+		Document record = db.getCollection("messages").find(eq("subject", threadMetadata.subject)).first();
 		if(record == null){
 			return null;
 		}
 		//is there a callback here?
 		UpdateResult updatedResult = db.getCollection("messages").updateOne(record,
-                new Document("$set", new Document("replyCount", threadMetadata.replyCount++)));
+                new Document("$set", new Document("replyCount", threadMetadata.getReplyCount())));
 		
 		//should wait on result.
 		if(!updatedResult.wasAcknowledged()){
@@ -58,7 +63,7 @@ public class MongoThreadMetadataRepo implements IThreadMetadataRepo {
 		db.getCollection("messages").insertOne(
                 new Document()
                     .append("subject", threadMetadata.subject)
-                    .append("replyCount", new Integer(threadMetadata.replyCount))
+                    .append("replyCount", new Integer(threadMetadata.getReplyCount()))
         );
 		return getBySubject(threadMetadata.subject);
 	}

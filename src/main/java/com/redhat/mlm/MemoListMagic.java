@@ -2,13 +2,17 @@ package com.redhat.mlm;
 
 import javax.mail.*;
 import java.util.List;
+import java.util.Objects;
 
 public class MemoListMagic {
 	
 	private IMemoListRepo memoListRepo;
 	private IThreadMetadataRepo threadMetadataRepo;
+	private final Runnable runnable;
+	private Thread runningThread;
+	private static final int PULL_DELAY_MS = 5000;
 	private boolean keepRunning = false;
-    public static void main(String... args){
+    public static void main(String... args) throws Exception{
 
         if (args.length < 3) {
             System.out.println("Usage: run email-host email-user email-password");
@@ -32,24 +36,21 @@ public class MemoListMagic {
     }
     
     public MemoListMagic(IMemoListRepo memoListRepo, IThreadMetadataRepo threadMetadataRepo){
+    	Objects.requireNonNull(memoListRepo);
+    	Objects.requireNonNull(threadMetadataRepo);
+    	//check not null.
 		this.memoListRepo = memoListRepo;
 		this.threadMetadataRepo = threadMetadataRepo;
-	}
-    
-    public void run() {
-    	if(keepRunning) return;
-    	keepRunning = true;
-    	Runnable runnable = new Runnable(){
+		runnable = new Runnable(){
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				try{
 				memoListRepo.connect();
 				while(keepRunning){
 					List<Message> memoListMessages = memoListRepo.getNewMessages();
 					updateOrInsertDatabaseMetrics(memoListMessages);
 					System.out.println("Sleeping... zzzz");
-					Thread.sleep(5000);}
+					Thread.sleep(PULL_DELAY_MS);}
 				}
 		        catch (Exception e) {
 		        	e.printStackTrace();
@@ -57,12 +58,26 @@ public class MemoListMagic {
 				}
 			}
     	};
-    	Thread t1 = new Thread(runnable);
-    	t1.start();
+	}
+    
+    public boolean isRunning(){
+    	//close enough.
+    	return keepRunning;
     }
     
-    public void stop(){
-    	keepRunning = false;
+    public void run() throws Exception {
+    	if(isRunning()) throw new Exception("Unable To Run The Magic Twice. Please Stop Before Running Again.");
+    	keepRunning = true;
+    	runningThread = new Thread(runnable);
+    	runningThread.start();
+    }
+    
+    public void stop() throws InterruptedException{
+    	if(isRunning()){
+    		System.out.println("Stoping. Please Wait.");
+    		keepRunning = false;
+    		runningThread.join();
+    	}
     }
     
     //TODO - lots and lots and lots to improve here!!!
@@ -70,12 +85,16 @@ public class MemoListMagic {
         messages.stream().forEach((message) -> {
             String subjectLine = MailUtility.normalizeSubjectLine(message);
             ThreadMetadata threadMetadata = threadMetadataRepo.getBySubject(subjectLine); 
-            if (threadMetadata != null) {
-                threadMetadata.replyCount++;
-                threadMetadataRepo.update(threadMetadata);
-            } else {
-            	threadMetadataRepo.add(new ThreadMetadata(subjectLine, 0));
-            }
+            try {
+            	if (threadMetadata != null) {
+            		threadMetadata.addOneReplyCount();
+            		threadMetadataRepo.update(threadMetadata);
+            	} else {
+            		threadMetadataRepo.add(new ThreadMetadata(subjectLine, 0));
+            	}
+            }catch (Exception e) {
+				e.printStackTrace();
+			}
         });
     }
     

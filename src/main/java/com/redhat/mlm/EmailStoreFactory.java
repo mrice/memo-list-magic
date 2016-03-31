@@ -1,5 +1,6 @@
 package com.redhat.mlm;
 
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -15,8 +16,12 @@ public class EmailStoreFactory implements IEmailStoreFactory {
 	//possibly implement IMAP here
 	//TODO integration testing for this.
 	public EmailStoreFactory(String emailHost, String emailUser, String emailPassword){
+		Objects.requireNonNull(emailHost, "Store creation requires host");
+		Objects.requireNonNull(emailUser, "Store creation requires user");
+		Objects.requireNonNull(emailPassword, "Store creation requires password");
 		Properties props = new Properties();
 		props.put("mail.store.protocol", "pop3s");
+		//put host here.
 	    props.put("mail.pop3.host", "pop.gmail.com");     
 	    props.put("mail.pop3.user", emailUser);
 	    props.put("mail.pop3.socketFactory", 995);
@@ -33,18 +38,14 @@ public class EmailStoreFactory implements IEmailStoreFactory {
 	    
 	    //could be useful
 	    //session.setDebug(true);
-	    
-	    
 	}
 	
 	@Override
 	public Store getEmailStore() {
-		// TODO Auto-generated method stub
 		try {
 			Store emailStore = session.getStore("pop3s");
 			return emailStore;
 		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

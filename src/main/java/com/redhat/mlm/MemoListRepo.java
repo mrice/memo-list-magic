@@ -1,6 +1,7 @@
 package com.redhat.mlm;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,7 +19,9 @@ public class MemoListRepo implements IMemoListRepo {
 	
 	
 	public MemoListRepo(IEmailStoreFactory storeFactory){
+		Objects.requireNonNull(storeFactory, "EmailStoreFactory can not be null");
 		emailStore = storeFactory.getEmailStore();
+		Objects.requireNonNull(emailStore, "EmailStore can not be null");
 	}
 	
 	public void connect() throws MessagingException{

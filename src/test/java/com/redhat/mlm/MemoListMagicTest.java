@@ -14,7 +14,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class MemoListMagicTest {
-	
 	@SuppressWarnings("serial")
 	@Test
 	public void testReplyCountAddition() throws MessagingException, Exception{
@@ -48,9 +47,42 @@ public class MemoListMagicTest {
         Thread.sleep(4000);
         mlm.stop();
         
-        assertEquals(3, savedMetadata.replyCount);
+        assertEquals(3, savedMetadata.getReplyCount());
         //assert repo add method is called once and that update is called once.
         Mockito.verify(threadMetadataRepo, Mockito.times(1)).add(Matchers.any());
         Mockito.verify(threadMetadataRepo, Mockito.times(2)).update(Matchers.any());
+	}
+	
+	@Test
+	public void testRunningThenStoppingStopsRunning() throws Exception{
+		IMemoListRepo memoListRepo = mock(IMemoListRepo.class);
+		IThreadMetadataRepo threadMetadataRepo = mock(IThreadMetadataRepo.class);
+		MemoListMagic mlm = new MemoListMagic(memoListRepo, threadMetadataRepo);
+		mlm.run();
+		assertTrue(mlm.isRunning());
+		mlm.stop();
+		assertFalse(mlm.isRunning());
+	}
+	
+	@Test(expected = Exception.class)
+	public void testRunningMagicTwiceThrowsException() throws Exception{
+		IMemoListRepo memoListRepo = mock(IMemoListRepo.class);
+		IThreadMetadataRepo threadMetadataRepo = mock(IThreadMetadataRepo.class);
+		MemoListMagic mlm = new MemoListMagic(memoListRepo, threadMetadataRepo);
+		mlm.run();
+		assertTrue(mlm.isRunning());
+		mlm.run();
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void testNullMemoListRepoThrowsException() throws Exception{
+		IThreadMetadataRepo threadMetadataRepo = mock(IThreadMetadataRepo.class);
+		new MemoListMagic(null, threadMetadataRepo);
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void testNullThreadMetadataThrowsException() throws Exception{
+		IMemoListRepo memoListRepo = mock(IMemoListRepo.class);
+		new MemoListMagic(memoListRepo, null);
 	}
 }

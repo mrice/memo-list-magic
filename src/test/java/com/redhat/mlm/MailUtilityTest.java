@@ -21,6 +21,19 @@ public class MailUtilityTest {
 
         assertEquals(whinyMemoListSubjectLne, MailUtility.normalizeSubjectLine(oneMessage));
         assertEquals(whinyMemoListSubjectLne, MailUtility.normalizeSubjectLine(replyMessage));
-        
+        assertEquals(whinyMemoListSubjectLne, MailUtility.normalizeSubjectLine(oneMessage.getSubject()));
+        assertEquals(whinyMemoListSubjectLne, MailUtility.normalizeSubjectLine(replyMessage.getSubject()));
     }
+	
+	@Test(expected = NullPointerException.class)
+	public void testNomalizeSubjectLineThrowsExceptionWhenSubjectIsNull(){
+		String subject = null;
+		MailUtility.normalizeSubjectLine(subject);
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void testNomalizeSubjectLineThrowsExceptionWhenMessageIsNull(){
+		Message subject = null;
+		MailUtility.normalizeSubjectLine(subject);
+	}
 }
