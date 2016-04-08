@@ -15,7 +15,7 @@ public class EmailStoreFactory implements IEmailStoreFactory {
 	
 	//possibly implement IMAP here
 	//TODO integration testing for this.
-	public EmailStoreFactory(String emailHost, String emailUser, String emailPassword){
+	public EmailStoreFactory(String emailHost, final String emailUser, final String emailPassword){
 		Objects.requireNonNull(emailHost, "Store creation requires host");
 		Objects.requireNonNull(emailUser, "Store creation requires user");
 		Objects.requireNonNull(emailPassword, "Store creation requires password");

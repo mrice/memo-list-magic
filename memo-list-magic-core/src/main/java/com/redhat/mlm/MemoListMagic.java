@@ -12,30 +12,9 @@ public class MemoListMagic {
 	private Thread runningThread;
 	private static final int PULL_DELAY_MS = 5000;
 	private boolean keepRunning = false;
-    public static void main(String... args) throws Exception{
-
-        if (args.length < 3) {
-            System.out.println("Usage: run email-host email-user email-password");
-            return;
-        }
-
-        String emailHost = args[0];
-        String emailUser = args[1];
-        String emailPassword = args[2];
-        
-        MemoListMagic memoListMagic = wireDependencies(emailHost,emailUser,emailPassword);
-        memoListMagic.run();
-    }
     
-    //poor mans constructor dependency injection. Set everything up here.
-    private static MemoListMagic wireDependencies(String emailHost, String emailUser, String emailPassword){
-    	IEmailStoreFactory emailStoreFactory = new EmailStoreFactory(emailHost, emailUser, emailPassword);
-        IMemoListRepo memoListRepo = new MemoListRepo(emailStoreFactory);
-    	IThreadMetadataRepo threadMetadataRepo = new MongoThreadMetadataRepo();
-        return new MemoListMagic(memoListRepo, threadMetadataRepo);
-    }
     
-    public MemoListMagic(IMemoListRepo memoListRepo, IThreadMetadataRepo threadMetadataRepo){
+    public MemoListMagic(final IMemoListRepo memoListRepo, IThreadMetadataRepo threadMetadataRepo){
     	Objects.requireNonNull(memoListRepo);
     	Objects.requireNonNull(threadMetadataRepo);
     	//check not null.
