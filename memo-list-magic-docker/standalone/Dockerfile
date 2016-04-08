@@ -18,8 +18,6 @@ RUN mkdir -p /var/run/sshd /var/log/supervisor
 ENV MONGO_USER=mongodb \
     MONGO_DATA_DIR=/var/lib/mongodb \
     MONGO_LOG_DIR=/var/log/mongodb
-
-#docker run -i -t --entrypoint /bin/bash memo
  
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 \
  && echo 'deb http://downloads-distro.mongodb.org/repo/debian-sysvinit dist 10gen' > /etc/apt/sources.list.d/mongodb.list \
@@ -28,6 +26,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 \
  && sed 's/^bind_ip/#bind_ip/' -i /etc/mongod.conf \
  && rm -rf /var/lib/apt/lists/*
 
+#this could be bad as I am overriding changes made above.
 COPY mongod.conf /etc/mongod.conf
  
 COPY mongoDBStartup.sh /sbin/mongoDBStartup.sh

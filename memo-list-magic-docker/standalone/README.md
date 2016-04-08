@@ -16,25 +16,25 @@ How to build via docker CLI
 Other useful commands for managing docker images
 
 List container information
-*docker ps
+* docker ps
 
 List more info about a particular container
-*docker inspect <container name>
+* docker inspect <container name>
 
 Stop a running container
-*docker kill <container name>
+* docker kill <container name>
 
 Stop all running containers
-*docker kill $(docker ps -q -a)
+* docker kill $(docker ps -q -a)
 
 Remove all containers
-*docker rm $(docker ps -q -a)
+* docker rm $(docker ps -q -a)
 
 Remove all images
-*docker rmi $(docker images -q)
+* docker rmi $(docker images -q)
 
 Run a container and inspect and control internals. Useful for debugging an image being created.
-*docker run -i -t --entrypoint /bin/bash <name of image>
+* docker run -i -t --entrypoint /bin/bash <name of image>
 
 
 How to build via Maven
