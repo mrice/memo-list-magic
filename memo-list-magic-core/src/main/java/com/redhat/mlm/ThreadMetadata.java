@@ -23,6 +23,4 @@ public class ThreadMetadata {
 		if(value < 0)
 			throw new Exception("Value Should Be Non Negative.");
 	}
-	
-	
 }

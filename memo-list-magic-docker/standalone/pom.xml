@@ -72,7 +72,7 @@
           </resources>
           <images>
             <image>
-              <name>memolist</name>
+              <name>standalone_standalone</name>
               <build>
                 <assembly>
                   <dockerFileDir>${basedir}</dockerFileDir>

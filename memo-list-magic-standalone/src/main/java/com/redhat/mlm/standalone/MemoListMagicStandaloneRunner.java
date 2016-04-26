@@ -15,17 +15,18 @@ public class MemoListMagicStandaloneRunner {
         String emailUser = args[1];
         String emailPassword = args[2];
         
-        //MemoListMagic memoListMagic = wireDependencies(emailHost,emailUser,emailPassword);
+        System.out.println("WE ARE RUNNING! Sleeping 15 seconds.");
+        Thread.sleep(15000);
+        
+        MemoListMagic memoListMagic = wireDependencies(emailHost,emailUser,emailPassword);
         //memoListMagic.run();
-        System.out.println("WE ARE RUNNING!");
-        Thread.sleep(120000);
     }
     
     //poor mans constructor dependency injection. Set everything up here.
     private static MemoListMagic wireDependencies(String emailHost, String emailUser, String emailPassword){
     	IEmailStoreFactory emailStoreFactory = new EmailStoreFactory(emailHost, emailUser, emailPassword);
         IMemoListRepo memoListRepo = new MemoListRepo(emailStoreFactory);
-    	IThreadMetadataRepo threadMetadataRepo = new MongoThreadMetadataRepo();
+    	IThreadMetadataRepo threadMetadataRepo = new CrateThreadMetadataRepo();
         return new MemoListMagic(memoListRepo, threadMetadataRepo);
     }
 
