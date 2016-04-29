@@ -8,7 +8,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
 
-public class MongoThreadMetadataRepo implements IThreadMetadataRepo {
+public class MongoThreadMetadataRepo implements ThreadMetadataRepo {
 
 	private MongoDatabase db;
 	public MongoThreadMetadataRepo(){

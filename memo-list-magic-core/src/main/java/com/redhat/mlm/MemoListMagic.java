@@ -6,15 +6,15 @@ import java.util.Objects;
 
 public class MemoListMagic {
 	
-	private IMemoListRepo memoListRepo;
-	private IThreadMetadataRepo threadMetadataRepo;
+	private MemoListRepo memoListRepo;
+	private ThreadMetadataRepo threadMetadataRepo;
 	private final Runnable runnable;
 	private Thread runningThread;
 	private static final int PULL_DELAY_MS = 5000;
 	private boolean keepRunning = false;
     
     
-    public MemoListMagic(final IMemoListRepo memoListRepo, IThreadMetadataRepo threadMetadataRepo){
+    public MemoListMagic(final MemoListRepo memoListRepo, ThreadMetadataRepo threadMetadataRepo){
     	Objects.requireNonNull(memoListRepo);
     	Objects.requireNonNull(threadMetadataRepo);
     	//check not null.

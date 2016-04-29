@@ -1,6 +1,6 @@
 package com.redhat.mlm;
 
-public interface IThreadMetadataRepo {
+public interface ThreadMetadataRepo {
 	ThreadMetadata getBySubject(String subject);
 	ThreadMetadata update(ThreadMetadata threadMetadata);
 	ThreadMetadata add(ThreadMetadata threadMetadata);

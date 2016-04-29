@@ -24,9 +24,9 @@ public class MemoListMagicStandaloneRunner {
     
     //poor mans constructor dependency injection. Set everything up here.
     private static MemoListMagic wireDependencies(String emailHost, String emailUser, String emailPassword){
-    	IEmailStoreFactory emailStoreFactory = new EmailStoreFactory(emailHost, emailUser, emailPassword);
+    	EmailStoreFactory emailStoreFactory = new IMAPEmailStoreFactory(emailHost, emailUser, emailPassword);
         IMemoListRepo memoListRepo = new MemoListRepo(emailStoreFactory);
-    	IThreadMetadataRepo threadMetadataRepo = new CrateThreadMetadataRepo();
+    	ThreadMetadataRepo threadMetadataRepo = new CrateThreadMetadataRepo();
         return new MemoListMagic(memoListRepo, threadMetadataRepo);
     }
 

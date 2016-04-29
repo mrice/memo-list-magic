@@ -36,7 +36,7 @@ public class MemoListRepoTest {
 	    final String localhost = "127.0.0.1";
 	    GreenMailUser user;
 	    GreenMail mailServer;
-	    IEmailStoreFactory emailStoreFactory;
+	    EmailStoreFactory emailStoreFactory;
 	    
 		// create user on mail server
 		mailServer = new GreenMail(ServerSetupTest.ALL);
@@ -54,7 +54,7 @@ public class MemoListRepoTest {
         Store store = session.getStore(urlName);
         
         
-        emailStoreFactory = mock(IEmailStoreFactory.class);
+        emailStoreFactory = mock(EmailStoreFactory.class);
         when(emailStoreFactory.getEmailStore()).thenReturn(store);
 		
 		//first message.
@@ -104,7 +104,7 @@ public class MemoListRepoTest {
 	public void testGettingMessagesWhenConnectionIsClosedThrowsException() throws Exception{
 		Store store = mock(Store.class);
         
-		IEmailStoreFactory emailStoreFactory = mock(IEmailStoreFactory.class);
+		EmailStoreFactory emailStoreFactory = mock(EmailStoreFactory.class);
         when(emailStoreFactory.getEmailStore()).thenReturn(store);
         
         MemoListRepo memoListRepo = new MemoListRepo(emailStoreFactory);
@@ -118,7 +118,7 @@ public class MemoListRepoTest {
 	
 	@Test(expected=NullPointerException.class)
 	public void testMemoListRepoCantBeConstructedWithNullEmailStore(){
-		IEmailStoreFactory emailStoreFactory = mock(IEmailStoreFactory.class);
+		EmailStoreFactory emailStoreFactory = mock(EmailStoreFactory.class);
         when(emailStoreFactory.getEmailStore()).thenReturn(null);
 		new MemoListRepo(emailStoreFactory);
 	}
@@ -127,7 +127,7 @@ public class MemoListRepoTest {
 	public void testStartingOpensTheConnection() throws MessagingException{
 		Store store = mock(Store.class);
         
-		IEmailStoreFactory emailStoreFactory = mock(IEmailStoreFactory.class);
+		EmailStoreFactory emailStoreFactory = mock(EmailStoreFactory.class);
         when(emailStoreFactory.getEmailStore()).thenReturn(store);
         
         MemoListRepo memoListRepo = new MemoListRepo(emailStoreFactory);
@@ -141,7 +141,7 @@ public class MemoListRepoTest {
 	public void testStartingTwiceDoesNotOpenTheConnectionTwice() throws MessagingException{
 		Store store = mock(Store.class);
         
-		IEmailStoreFactory emailStoreFactory = mock(IEmailStoreFactory.class);
+		EmailStoreFactory emailStoreFactory = mock(EmailStoreFactory.class);
         when(emailStoreFactory.getEmailStore()).thenReturn(store);
         
         MemoListRepo memoListRepo = new MemoListRepo(emailStoreFactory);
@@ -157,7 +157,7 @@ public class MemoListRepoTest {
 	public void testConnectingAndThenClosingClosesTheConnection() throws MessagingException{
 		Store store = mock(Store.class);
         
-		IEmailStoreFactory emailStoreFactory = mock(IEmailStoreFactory.class);
+		EmailStoreFactory emailStoreFactory = mock(EmailStoreFactory.class);
         when(emailStoreFactory.getEmailStore()).thenReturn(store);
         
         MemoListRepo memoListRepo = new MemoListRepo(emailStoreFactory);
@@ -174,7 +174,7 @@ public class MemoListRepoTest {
 	public void testClosingWhenNotConnectedDoesNotTryToCloseTheConnection() throws MessagingException{
 		Store store = mock(Store.class);
         
-		IEmailStoreFactory emailStoreFactory = mock(IEmailStoreFactory.class);
+		EmailStoreFactory emailStoreFactory = mock(EmailStoreFactory.class);
         when(emailStoreFactory.getEmailStore()).thenReturn(store);
         
         MemoListRepo memoListRepo = new MemoListRepo(emailStoreFactory);

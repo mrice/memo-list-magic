@@ -17,7 +17,7 @@ public class MemoListMagicTest {
 	@SuppressWarnings("serial")
 	@Test
 	public void testReplyCountAddition() throws MessagingException, Exception{
-		IMemoListRepo memoListRepo = mock(IMemoListRepo.class);
+		MemoListRepo memoListRepo = mock(MemoListRepo.class);
 		
 		Message messageOne = mock(Message.class);
 		when(messageOne.getSubject()).thenReturn("A Subject");
@@ -35,7 +35,7 @@ public class MemoListMagicTest {
         ThreadMetadata savedMetadata = new ThreadMetadata("A Subject", 1);
         
         
-        IThreadMetadataRepo threadMetadataRepo = mock(IThreadMetadataRepo.class);
+        ThreadMetadataRepo threadMetadataRepo = mock(ThreadMetadataRepo.class);
         //return no nothing the first call then a saved metadata the second call
         when(threadMetadataRepo.getBySubject("A Subject"))
         	.thenReturn(null)
@@ -55,8 +55,8 @@ public class MemoListMagicTest {
 	
 	@Test
 	public void testRunningThenStoppingStopsRunning() throws Exception{
-		IMemoListRepo memoListRepo = mock(IMemoListRepo.class);
-		IThreadMetadataRepo threadMetadataRepo = mock(IThreadMetadataRepo.class);
+		MemoListRepo memoListRepo = mock(MemoListRepo.class);
+		ThreadMetadataRepo threadMetadataRepo = mock(ThreadMetadataRepo.class);
 		MemoListMagic mlm = new MemoListMagic(memoListRepo, threadMetadataRepo);
 		mlm.run();
 		assertTrue(mlm.isRunning());
@@ -66,8 +66,8 @@ public class MemoListMagicTest {
 	
 	@Test(expected = Exception.class)
 	public void testRunningMagicTwiceThrowsException() throws Exception{
-		IMemoListRepo memoListRepo = mock(IMemoListRepo.class);
-		IThreadMetadataRepo threadMetadataRepo = mock(IThreadMetadataRepo.class);
+		MemoListRepo memoListRepo = mock(MemoListRepo.class);
+		ThreadMetadataRepo threadMetadataRepo = mock(ThreadMetadataRepo.class);
 		MemoListMagic mlm = new MemoListMagic(memoListRepo, threadMetadataRepo);
 		mlm.run();
 		assertTrue(mlm.isRunning());
@@ -76,13 +76,13 @@ public class MemoListMagicTest {
 	
 	@Test(expected = NullPointerException.class)
 	public void testNullMemoListRepoThrowsException() throws Exception{
-		IThreadMetadataRepo threadMetadataRepo = mock(IThreadMetadataRepo.class);
+		ThreadMetadataRepo threadMetadataRepo = mock(ThreadMetadataRepo.class);
 		new MemoListMagic(null, threadMetadataRepo);
 	}
 	
 	@Test(expected = NullPointerException.class)
 	public void testNullThreadMetadataThrowsException() throws Exception{
-		IMemoListRepo memoListRepo = mock(IMemoListRepo.class);
+		MemoListRepo memoListRepo = mock(MemoListRepo.class);
 		new MemoListMagic(memoListRepo, null);
 	}
 	
@@ -90,8 +90,8 @@ public class MemoListMagicTest {
 	//memolistRepo.close throws exception
 	@Test
 	public void testErrorHandlingWhenMemoListRepoThrowsExceptionOnGetMessagesAndClose() throws Exception{
-		IMemoListRepo memoListRepo = mock(IMemoListRepo.class);
-		IThreadMetadataRepo threadMetadataRepo = mock(IThreadMetadataRepo.class);
+		MemoListRepo memoListRepo = mock(MemoListRepo.class);
+		ThreadMetadataRepo threadMetadataRepo = mock(ThreadMetadataRepo.class);
 		MemoListMagic mlm = new MemoListMagic(memoListRepo, threadMetadataRepo);
 		Mockito.doThrow(new Exception()).when(memoListRepo).getNewMessages();
 		Mockito.doThrow(new MessagingException()).when(memoListRepo).close();

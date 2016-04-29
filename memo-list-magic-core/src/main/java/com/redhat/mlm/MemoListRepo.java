@@ -13,12 +13,12 @@ import javax.mail.MessagingException;
 import javax.mail.Store;
 import javax.mail.search.FlagTerm;
 
-public class MemoListRepo implements IMemoListRepo {
+public class MemoListRepo {
 
 	private Store emailStore;
 	
 	
-	public MemoListRepo(IEmailStoreFactory storeFactory){
+	public MemoListRepo(EmailStoreFactory storeFactory){
 		Objects.requireNonNull(storeFactory, "EmailStoreFactory can not be null");
 		emailStore = storeFactory.getEmailStore();
 		Objects.requireNonNull(emailStore, "EmailStore can not be null");
@@ -30,7 +30,6 @@ public class MemoListRepo implements IMemoListRepo {
 		}
 	}
 	
-	@Override
 	public List<Message> getNewMessages() throws Exception {
 		//if store is not connected, throw error.
 		if(emailStore == null || !emailStore.isConnected()){

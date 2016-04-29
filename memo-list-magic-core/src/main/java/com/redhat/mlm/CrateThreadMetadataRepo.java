@@ -5,7 +5,7 @@ import java.util.Arrays;
 import io.crate.action.sql.SQLResponse;
 import io.crate.client.CrateClient;
 
-public class CrateThreadMetadataRepo implements IThreadMetadataRepo{
+public class CrateThreadMetadataRepo implements ThreadMetadataRepo{
 
 	public CrateThreadMetadataRepo(){
 		//take this in as a configuration.
