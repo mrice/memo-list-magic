@@ -36,6 +36,12 @@ Remove all images
 Run a container and inspect and control internals. Useful for debugging an image being created.
 * docker run -i -t --entrypoint /bin/bash <name of image>
 
+List Dangling Volumes
+* docker volume ls -qf dangling=true
+
+Cleanup Dangling Volumes
+* docker volume rm $(docker volume ls -qf dangling=true)
+
 
 How to build via Maven
 ----------------------
