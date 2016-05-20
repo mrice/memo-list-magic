@@ -52,7 +52,7 @@
 		<guavaVersion>19.0</guavaVersion>
 		<mongoVersion>3.0.4</mongoVersion>
 		<greenMailVersion>1.5.0</greenMailVersion>
-		<crateVersion>0.54.8</crateVersion>
+		<crateVersion>0.54.9</crateVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -109,21 +109,8 @@
 				<artifactId>mongo-java-driver</artifactId>
 				<version>${mongoVersion}</version>
 			</dependency>
-			<dependency>
-				<groupId>io.crate</groupId>
-				<artifactId>crate-client</artifactId>
-				<version>${crateVersion}</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
-	<repositories>
-		<repository>
-			<id>central</id>
-			<name>bintray</name>
-			<url>http://jcenter.bintray.com</url>
-		</repository>
-	</repositories>
 
 	<profiles>
 		<profile>

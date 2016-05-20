@@ -19,7 +19,7 @@
     <dependency>
 		<groupId>com.icegreen</groupId>
 		<artifactId>greenmail-standalone</artifactId>
-		<version>1.5.1-SNAPSHOT</version>
+		<version>1.5.0</version>
 	</dependency>
   </dependencies>
 
@@ -41,7 +41,7 @@
             <artifactItem>
               <groupId>com.icegreen</groupId>
               <artifactId>greenmail-standalone</artifactId>
-              <version>1.5.1-SNAPSHOT</version>
+              <version>1.5.0</version>
               <type>jar</type>
               <overWrite>false</overWrite>
               <destFileName>greenmail-standalone.jar</destFileName>
@@ -125,5 +125,13 @@
       </plugin>
     </plugins>
   </build>
+
+	<repositories>
+		<repository>
+			<id>central</id>
+			<name>bintray</name>
+			<url>http://jcenter.bintray.com</url>
+		</repository>
+	</repositories>
 
 </project>
