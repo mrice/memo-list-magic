@@ -1,0 +1,23 @@
+version: '2'
+services:
+  standalone:
+    build: .
+    depends_on:
+      - greenmail
+      - crate
+  greenmail:
+    image: greenmail/standalone:1.5.0
+    ports:
+      - 3025:3025
+      - 3110:3110
+      - 3143:3143
+      - 3465:3465
+      - 3993:3993
+      - 3995:3995
+  crate:
+    image: crate
+    ports:
+      - "4200:4200"
+      - "4300:4300"
+    volumes:
+      - /mnt/data/crate:/data
