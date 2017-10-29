@@ -4,6 +4,10 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
+import com.redhat.mlm.model.ThreadMetadata;
+import com.redhat.mlm.repo.MemoListRepo;
+import com.redhat.mlm.repo.ThreadMetadataRepo;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 

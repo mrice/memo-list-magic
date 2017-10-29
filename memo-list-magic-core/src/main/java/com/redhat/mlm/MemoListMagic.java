@@ -1,6 +1,11 @@
 package com.redhat.mlm;
 
 import javax.mail.*;
+
+import com.redhat.mlm.model.ThreadMetadata;
+import com.redhat.mlm.repo.MemoListRepo;
+import com.redhat.mlm.repo.ThreadMetadataRepo;
+
 import java.util.List;
 import java.util.Objects;
 

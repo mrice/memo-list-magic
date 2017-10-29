@@ -1,6 +1,9 @@
-package com.redhat.mlm;
+package com.redhat.mlm.repo.impl;
 
 import org.junit.Test;
+
+import com.redhat.mlm.repo.impl.IMAPEmailStoreFactory;
+
 import static org.junit.Assert.*;
 
 public class EmailStoreFactoryTest {

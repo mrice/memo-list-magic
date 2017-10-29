@@ -1,4 +1,6 @@
-package com.redhat.mlm;
+package com.redhat.mlm.model;
+
+import com.redhat.mlm.MailUtility;
 
 public class ThreadMetadata {
 	public final String subject;

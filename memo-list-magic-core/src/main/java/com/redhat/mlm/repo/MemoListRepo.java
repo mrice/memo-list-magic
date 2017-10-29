@@ -1,4 +1,4 @@
-package com.redhat.mlm;
+package com.redhat.mlm.repo;
 
 import java.util.List;
 import java.util.Objects;

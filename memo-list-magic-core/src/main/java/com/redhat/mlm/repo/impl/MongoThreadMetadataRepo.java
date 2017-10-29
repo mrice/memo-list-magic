@@ -1,4 +1,4 @@
-package com.redhat.mlm;
+package com.redhat.mlm.repo.impl;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -7,6 +7,8 @@ import org.bson.Document;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
+import com.redhat.mlm.model.ThreadMetadata;
+import com.redhat.mlm.repo.ThreadMetadataRepo;
 
 public class MongoThreadMetadataRepo implements ThreadMetadataRepo {
 

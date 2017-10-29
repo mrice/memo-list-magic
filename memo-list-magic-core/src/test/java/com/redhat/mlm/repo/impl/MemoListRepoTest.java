@@ -1,4 +1,4 @@
-package com.redhat.mlm;
+package com.redhat.mlm.repo.impl;
 
 import java.util.Date;
 import java.util.List;
@@ -25,6 +25,8 @@ import com.icegreen.greenmail.store.MailFolder;
 import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetupTest;
+import com.redhat.mlm.repo.EmailStoreFactory;
+import com.redhat.mlm.repo.MemoListRepo;
 
 public class MemoListRepoTest {
 	

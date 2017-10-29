@@ -1,4 +1,6 @@
-package com.redhat.mlm;
+package com.redhat.mlm.repo;
+
+import com.redhat.mlm.model.ThreadMetadata;
 
 public interface ThreadMetadataRepo {
 	ThreadMetadata getBySubject(String subject);

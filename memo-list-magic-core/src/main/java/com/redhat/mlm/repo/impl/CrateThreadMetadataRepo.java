@@ -1,6 +1,9 @@
-package com.redhat.mlm;
+package com.redhat.mlm.repo.impl;
 
 import java.util.Arrays;
+
+import com.redhat.mlm.model.ThreadMetadata;
+import com.redhat.mlm.repo.ThreadMetadataRepo;
 
 import io.crate.action.sql.SQLResponse;
 import io.crate.client.CrateClient;

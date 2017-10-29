@@ -1,8 +1,10 @@
-package com.redhat.mlm;
+package com.redhat.mlm.model;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import com.redhat.mlm.model.ThreadMetadata;
 
 public class ThreadMetadataTest {
 	@Test

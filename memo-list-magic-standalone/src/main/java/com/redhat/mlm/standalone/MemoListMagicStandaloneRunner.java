@@ -1,6 +1,11 @@
 package com.redhat.mlm.standalone;
 
 import com.redhat.mlm.*;
+import com.redhat.mlm.repo.EmailStoreFactory;
+import com.redhat.mlm.repo.MemoListRepo;
+import com.redhat.mlm.repo.ThreadMetadataRepo;
+import com.redhat.mlm.repo.impl.CrateThreadMetadataRepo;
+import com.redhat.mlm.repo.impl.IMAPEmailStoreFactory;
 
 public class MemoListMagicStandaloneRunner {
 

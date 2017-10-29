@@ -1,4 +1,4 @@
-package com.redhat.mlm;
+package com.redhat.mlm.repo.impl;
 
 import java.util.Objects;
 import java.util.Properties;
@@ -8,6 +8,8 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
+
+import com.redhat.mlm.repo.EmailStoreFactory;
 
 public class IMAPEmailStoreFactory implements EmailStoreFactory {
 	
